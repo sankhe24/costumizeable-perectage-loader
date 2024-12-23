@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2vmax;
+    align-items: center;
+    justify-content: center;
+}
+
+#box {
+    width: 160px;
+    height: 160px;
+    position: relative;
+}
+
+#outer {
+    height: 160px;
+    width: 160px;
+    border-radius: 50%;
+    box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15), -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+    padding: 20px;
+}
+
+#inner {
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 4px 4px 6px -1px rgba(0, 0, 0, 0.2), inset -4px -4px 6px -1px rgba(255, 255, 255, 0.7),
+        -0.5px -0.5px 0px rgba(255, 255, 255, 1),
+        0.5px 0.5px 0px rgba(0, 0, 0, 0.15), 0px 12px 10px -10px rgba(0, 0, 0, 0.05);
+}
+
+circle {
+    fill: none;
+    stroke: url(#GradientColor);
+    stroke-width: 20px;
+    stroke-dasharray: 472;
+    stroke-dashoffset: 472;
+}
+
+svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#ip {
+    margin-top: 1vmax;
+    height: 40px;
+    width: 100px;
+    text-align: center;
+    font-size: 25px;
+}
+
+#ip1 {
+    margin-top: 1vmax;
+    height: 40px;
+    width: 80px;
+    text-align: center;
+    font-size: 25px;
+}
+
+.text {
+    font-size: 20px;
+}</style>    <title>Customizable Percentage Loader</title>
+</head>
+
+<body>
+    <div id="box">
+        <div id="outer">
+            <div id="inner">
+                <div id="number">
+                    <h3 id="num">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="160px" height="160px">
+            <defs>
+                <linearGradient id="GradientColor">
+                    <stop offset="0%" stop-color="#e91e63" />
+                    <stop offset="100%" stop-color="#673ab7" />
+                </linearGradient>
+            </defs>
+            <circle id="circle" cx="80" cy="80" r="70" stroke-linecap="round" />
+        </svg>
+    </div>
+    <div class="custom">
+        <input type="number" id="ip" onchange="update()" value="50" min="0" max="100">
+        <span class="text">%</span>
+    </div>
+    <div class="custom">
+        <input type="number" id="ip1" onchange="update1()" value="2000" min="0">
+        <span class="text">ms</span>
+    </div>
+
+
+</body>
+<script type="text/javascript">let circle = document.getElementById("circle");
+    const getnumber = document.getElementById("num");
+    let num = 50;
+    let num1 = 2000;
+    
+    // update from user input values
+    function update1() {
+        let userip1 = document.getElementById("ip1");
+        num1 = userip1.value;
+        runCounter(num1)
+        // console.log(num , num1)
+    
+    }
+    
+    // update from user input values
+    function update() {
+        let userip = document.getElementById("ip");
+        num = userip.value;
+        runCounter(num1)
+        // console.log(num , num1)
+    
+    }
+    
+    // used to convert percentage to circular completion
+    function loading(num) {
+        let round = 472 - (4.72 * num);
+        circle.style.strokeDashoffset = round;
+    }
+    
+    // Used to make sync between circular animation and inner percentage
+    function runCounter(duration) {
+        let userip = document.getElementById("ip");
+        let count = 1;
+        let interval = duration / num;
+    
+        function updateCounter() {
+            getnumber.textContent = count;
+            loading(count);
+            if (count < num) {
+                count++;
+                setTimeout(updateCounter, interval);
+            }
+        }
+        updateCounter();
+    }
+    
+    runCounter(2000)
+    
+    </script>
+
+</html>
